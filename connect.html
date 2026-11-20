@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><meta name="referrer" content="no-referrer">
+<title>Connect · Gus Mode</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<span class="badge">GUS MODE</span>
+<h1 id="title">Almost connected</h1>
+<p id="what">Copy this page's address and paste it into the terminal where the connect script is waiting.</p>
+<textarea id="addr" readonly></textarea>
+<button id="copy">Copy this address</button>
+<p class="muted">This page keeps nothing and sends nothing anywhere: the address only goes where you paste it. The code in
+it works once and only for a few minutes.</p>
+<script>
+  var a = document.getElementById("addr"), b = document.getElementById("copy");
+  a.value = window.location.href;
+  if (!/[?&]code=/.test(window.location.search)) {
+    document.getElementById("title").textContent = "No login code here";
+    document.getElementById("what").textContent = /[?&]error=/.test(window.location.search)
+      ? "The login was cancelled or refused. Run the connect script again and use its new link."
+      : "This page is where Google or TikTok sends you after you allow access. Start from the link the connect script prints.";
+  }
+  b.onclick = function () {
+    a.focus(); a.select(); a.setSelectionRange(0, 99999);
+    var done = function () { b.textContent = "Copied! Now paste it in the terminal"; };
+    if (navigator.clipboard) { navigator.clipboard.writeText(a.value).then(done, function () { document.execCommand("copy"); done(); }); }
+    else { document.execCommand("copy"); done(); }
+  };
+</script>
+</main></body></html>
